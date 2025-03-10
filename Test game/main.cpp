@@ -1,7 +1,4 @@
-﻿//#include <windows.h>
-//#include <d3d11.h>
-//#include <DirectXMath.h>
-
+﻿#include <vector>
 #include <windows.h>
 #include <d3d11.h>
 #include <DirectXMath.h>
@@ -14,6 +11,13 @@
 
 using namespace DirectX;
 
+
+struct Fireball {
+    float x, y;
+    int direction;
+};
+
+
 // Cấu hình cửa sổ
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
@@ -23,15 +27,22 @@ ID3D11DeviceContext* deviceContext = nullptr;
 IDXGISwapChain* swapChain = nullptr;
 ID3D11RenderTargetView* renderTargetView = nullptr;
 std::unique_ptr<SpriteBatch> spriteBatch;
-ID3D11ShaderResourceView* textureChar1 = nullptr;
-ID3D11ShaderResourceView* textureChar2 = nullptr;
-ID3D11ShaderResourceView* textureChar3 = nullptr;
-ID3D11ShaderResourceView* currentTexture = nullptr;
 
+ID3D11ShaderResourceView* textureChar = nullptr;
+ID3D11ShaderResourceView* textureFire = nullptr;
+ID3D11ShaderResourceView* textureBoss = nullptr;
+
+
+
+std::vector<Fireball> fireballs;
 
 // Vị trí nhân vật
 float charX = 300.0f, charY = 100.0f;
 const float charSpeed = 10.0f;
+int FireDirection = 0;
+
+
+
 
 // Vị trí boss
 float bossX = 100.0f, bossY = 400.0f;
@@ -44,21 +55,40 @@ void HandleKeyPress(WPARAM key) {
     switch (key) {
     case 'A': case VK_LEFT:
         if(charX>=10)
+        {
             charX -= charSpeed;
+            FireDirection = 0;
+		}
         break;
     case 'D': case VK_RIGHT:
         if (charX <=SCREEN_WIDTH-30)
-        charX += charSpeed;
+        {
+            charX += charSpeed;
+			FireDirection = 1;
+		}
         break;
     case 'W': case VK_UP:
         if (charY >= 10)
-        charY -= charSpeed;
+        {       
+            charY -= charSpeed;
+		    FireDirection = 2;
+		}
         break;
     case 'S': case VK_DOWN:
-        if (charY <= SCREEN_HEIGHT-50)
-        charY += charSpeed;
+        if (charY <= SCREEN_HEIGHT - 50)
+        {
+            charY += charSpeed;
+            FireDirection = 3;
+        }
         break;
+    case 'J':
+        {
+        fireballs.push_back({ charX, charY, FireDirection });
+
+		    break;
+        }
     }
+
 }
 
 // Hàm xử lý Windows
@@ -104,11 +134,11 @@ bool InitD3D(HWND hwnd) {
 
     spriteBatch = std::make_unique<SpriteBatch>(deviceContext);
 
-    if (FAILED(CreateWICTextureFromFile(device, L"char1.png", nullptr, &textureChar1))) return false;
-    if (FAILED(CreateWICTextureFromFile(device, L"char2.png", nullptr, &textureChar2))) return false;
-    if (FAILED(CreateWICTextureFromFile(device, L"char3.png", nullptr, &textureChar3))) return false;
+    if (FAILED(CreateWICTextureFromFile(device, L"char1.png", nullptr, &textureChar))) return false;
+    if (FAILED(CreateWICTextureFromFile(device, L"fire.png", nullptr, &textureFire))) return false;
+    if (FAILED(CreateWICTextureFromFile(device, L"char3.png", nullptr, &textureBoss))) return false;
 
-    currentTexture = textureChar1;
+
     srand((unsigned int)time(NULL));
     return true;
 }
@@ -118,6 +148,7 @@ void RenderFrame(float elapsedTime) {
     float clearColor[4] = { 0.1f, 0.1f, 0.1f, 1.0f };
     deviceContext->ClearRenderTargetView(renderTargetView, clearColor);
 
+	// boss move
     if (elapsedTime - bossLastMoveTime >= 1.0f) {
         bossDirX = (rand() % 3) - 1;// -1,0,1
         bossDirY = (rand() % 3) - 1;//-1,0,1
@@ -136,16 +167,45 @@ void RenderFrame(float elapsedTime) {
     {
         bossDirX = (rand() % 3) - 1;// -1,0,1
         bossDirY = (rand() % 3) - 1;//-1,0,1
+    } for (auto it = fireballs.begin(); it != fireballs.end(); ) {
+        switch (it->direction) {
+        case 0: it->x -= 0.5f; break;
+        case 1: it->x += 0.5f; break;
+        case 2: it->y -= 0.5f; break;
+        case 3: it->y += 0.5f; break;
+        }
+        if (abs(it->x - bossX) < 20 && abs(it->y - bossY) < 20) {
+            MessageBox(hwnd, L"Win!", L"Alert", MB_OK);
+            PostQuitMessage(0);
+        }
+        else
+        {
+            if (it->x < 0 || it->x > SCREEN_WIDTH || it->y < 0 || it->y > SCREEN_HEIGHT)
+            {
+
+                it = fireballs.erase(it);
+            }
+            else {
+                ++it;
+            }
+        }
+        
+        
+      
     }
 
     if (abs(charX - bossX) < 20 && abs(charY - bossY) < 20) {
         MessageBox(hwnd, L"Game Over!", L"Alert", MB_OK);
         PostQuitMessage(0);
     }
-
+    
     spriteBatch->Begin();
-    spriteBatch->Draw(currentTexture, XMFLOAT2(charX, charY));
-    spriteBatch->Draw(textureChar3, XMFLOAT2(bossX, bossY));
+    spriteBatch->Draw(textureChar, XMFLOAT2(charX, charY));
+    for (const auto& fireball : fireballs) {
+        spriteBatch->Draw(textureFire, XMFLOAT2(fireball.x, fireball.y));
+    }
+    spriteBatch->Draw(textureBoss, XMFLOAT2(bossX, bossY));
+    
     spriteBatch->End();
 
     swapChain->Present(0, 0);
@@ -169,9 +229,9 @@ void RunGame() {
 
 // Cleanup
 void Cleanup() {
-    if (textureChar1) textureChar1->Release();
-    if (textureChar2) textureChar2->Release();
-    if (textureChar3) textureChar3->Release();
+    if (textureChar) textureChar->Release();
+    if (textureFire) textureFire->Release();
+    if (textureBoss) textureBoss->Release();
     if (renderTargetView) renderTargetView->Release();
     if (swapChain) swapChain->Release();
     if (deviceContext) deviceContext->Release();

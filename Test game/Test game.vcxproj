@@ -146,6 +146,7 @@ dxguid.lib;DirectXTK.lib;Windowscodecs.lib;%(AdditionalDependencies)</Additional
     <Image Include="char1.png" />
     <Image Include="background.png" />
     <Image Include="char3.png" />
+    <Image Include="fire.png" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc" />

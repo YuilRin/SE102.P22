@@ -37,6 +37,9 @@
     <Image Include="background.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="fire.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc">
