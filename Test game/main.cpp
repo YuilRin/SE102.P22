@@ -119,16 +119,24 @@ void RenderFrame(float elapsedTime) {
     deviceContext->ClearRenderTargetView(renderTargetView, clearColor);
 
     if (elapsedTime - bossLastMoveTime >= 1.0f) {
-        bossDirX = (rand() % 3) - 1;
-        bossDirY = (rand() % 3) - 1;
+        bossDirX = (rand() % 3) - 1;// -1,0,1
+        bossDirY = (rand() % 3) - 1;//-1,0,1
         bossLastMoveTime = elapsedTime;
     }
 
     bossX += bossDirX * bossSpeed;
     bossY += bossDirY * bossSpeed;
 
-    if (bossX <= 0 || bossX >= SCREEN_WIDTH - 20) bossDirX *= -1;
-    if (bossY <= 0 || bossY >= SCREEN_HEIGHT - 20) bossDirY *= -1;
+    if (bossX <= 0 || bossX >= SCREEN_WIDTH - 20)
+    {
+        bossDirX = (rand() % 3) - 1;// -1,0,1
+        bossDirY = (rand() % 3) - 1;//-1,0,1
+    }
+    if (bossY <= 0 || bossY >= SCREEN_HEIGHT - 20)
+    {
+        bossDirX = (rand() % 3) - 1;// -1,0,1
+        bossDirY = (rand() % 3) - 1;//-1,0,1
+    }
 
     if (abs(charX - bossX) < 20 && abs(charY - bossY) < 20) {
         MessageBox(hwnd, L"Game Over!", L"Alert", MB_OK);
