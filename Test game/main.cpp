@@ -185,7 +185,6 @@ void RenderFrame(float elapsedTime) {
                 ++it;
             }
         }
-   
     }
 
     if (abs(charX - bossX) < 20 && abs(charY - bossY) < 20) {
