@@ -113,9 +113,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d11.lib
-;d3dcompiler.lib;
-dxguid.lib;DirectXTK.lib;Windowscodecs.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dxguid.lib;DirectXTK.lib;Windowscodecs.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)packages\directxtk_desktop_win10.2024.10.29.1\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -138,13 +136,13 @@ dxguid.lib;DirectXTK.lib;Windowscodecs.lib;%(AdditionalDependencies)</Additional
   <ItemGroup>
     <ClCompile Include="Boss.cpp" />
     <ClCompile Include="Character.cpp" />
-    <ClCompile Include="game.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Boss.h" />
     <ClInclude Include="Character.h" />
-    <ClInclude Include="game.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="Resource.h" />
   </ItemGroup>
   <ItemGroup>
