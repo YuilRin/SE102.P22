@@ -242,6 +242,7 @@ void RenderFrame(float elapsedTime) {
 void RunGame() {
     MSG msg = {};
     float startTime = (float)GetTickCount64() / 1000.0f;
+
     while (msg.message != WM_QUIT) {
         float currentTime = (float)GetTickCount64() / 1000.0f;
         float elapsedTime = currentTime - startTime;
