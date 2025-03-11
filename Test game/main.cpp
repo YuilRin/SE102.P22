@@ -32,16 +32,12 @@ ID3D11ShaderResourceView* textureChar = nullptr;
 ID3D11ShaderResourceView* textureFire = nullptr;
 ID3D11ShaderResourceView* textureBoss = nullptr;
 
-
-
 std::vector<Fireball> fireballs;
 
 // Vị trí nhân vật
 float charX = 300.0f, charY = 100.0f;
 const float charSpeed = 10.0f;
 int FireDirection = 0;
-
-
 
 
 // Vị trí boss
@@ -189,9 +185,7 @@ void RenderFrame(float elapsedTime) {
                 ++it;
             }
         }
-        
-        
-      
+   
     }
 
     if (abs(charX - bossX) < 20 && abs(charY - bossY) < 20) {
@@ -238,13 +232,47 @@ void Cleanup() {
     if (device) device->Release();
 }
 
-// Main
+// Hiển thị màn hình chờ trước khi vào game
+void ShowStartScreen(HWND hwnd) {
+    MSG msg = {};
+    HDC hdc = GetDC(hwnd);
+    SetTextColor(hdc, RGB(255, 255, 255)); 
+    SetBkMode(hdc, TRANSPARENT); 
+
+    bool keyPressed = false;
+
+    while (!keyPressed) {
+        if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+            if (msg.message == WM_QUIT) exit(0);
+            if (msg.message == WM_KEYDOWN) keyPressed = true;
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
+        }
+
+        // Xóa màn hình bằng màu đen
+        float clearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+        deviceContext->ClearRenderTargetView(renderTargetView, clearColor);
+
+        // Dùng GDI để vẽ chữ lên của cửa sổ
+        RECT textRect = { SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT / 2, SCREEN_WIDTH, SCREEN_HEIGHT };
+        DrawText(hdc, L"Press any key to begin", -1, &textRect, DT_NOCLIP | DT_SINGLELINE);
+
+        swapChain->Present(1, 0);
+    }
+
+    ReleaseDC(hwnd, hdc);
+}
+
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
     WNDCLASS wc = { CS_HREDRAW | CS_VREDRAW, WindowProc, 0, 0, hInstance, NULL, LoadCursor(NULL, IDC_ARROW), NULL, NULL, L"DX11Class" };
     RegisterClass(&wc);
     hwnd = CreateWindow(L"DX11Class", L"DirectX 11 Sprite Example", WS_OVERLAPPEDWINDOW, 100, 100, SCREEN_WIDTH, SCREEN_HEIGHT, NULL, NULL, hInstance, NULL);
     ShowWindow(hwnd, nCmdShow);
+    
     if (!InitD3D(hwnd)) return 0;
+    
+    ShowStartScreen(hwnd);
+    
     RunGame();
     Cleanup();
     return 0;
