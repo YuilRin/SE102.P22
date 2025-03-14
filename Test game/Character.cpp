@@ -1,38 +1,26 @@
-#include "Character.h"
-#include <iostream>
+#include "CastlevaniaGame.h"
 
-ID3D11ShaderResourceView* characterTexture = nullptr; // ??nh ngh?a bi?n toàn c?c
-
-Character::Character(const std::string& name, int hp) : x(0), y(0), speed(2.0f), hp(hp) {}
-
-Character::Character() : x(100), y(100), speed(2.0f), hp(100) {}
-
-Character::~Character() {}
-
-void Character::attack() {
-    std::cout << "Character attacks!" << std::endl;
+CastlevaniaGame::CastlevaniaGame(HINSTANCE hInstance, LPWSTR title)
+    : Game(hInstance, title, 800, 600, 60, 0)
+{
 }
 
-std::string Character::getName() const {
-    return "Character";
+void CastlevaniaGame::init()
+{
+    Game::init();
 }
 
-int Character::getHP() const {
-    return hp;
+void CastlevaniaGame::update(float deltatime)
+{
+    // Update logic here
 }
 
-void Character::takeDamage(int damage) {
-    hp -= damage;
-    if (hp < 0) hp = 0;
+void CastlevaniaGame::draw()
+{
+    Game::render();
 }
 
-void Character::move(float dx, float dy) {
-    x += dx * speed;
-    y += dy * speed;
-}
-
-void Character::draw(ID3D11DeviceContext* context, DirectX::SpriteBatch* spriteBatch) {
-    if (spriteBatch && characterTexture) {
-        spriteBatch->Draw(characterTexture, DirectX::XMFLOAT2(x, y));
-    }
+void CastlevaniaGame::release()
+{
+    Game::release();
 }

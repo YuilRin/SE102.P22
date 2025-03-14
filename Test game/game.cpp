@@ -1,145 +1,145 @@
-#include "game.h"
-#include <iostream>
-#include "SpriteBatch.h"
-#include "WICTextureLoader.h"
-#include <d3d11.h>
-#include <SimpleMath.h>
-#include <wrl/client.h>
+#include <string>
+#include "Game.h"
+#include <dinput.h>
 
-// Initialize static variable
-Game* Game::instance = nullptr;
-Game::Game() {
-    instance = this;
-    initD3D();
 
-    // Ensure context is properly initialized
-    if (context == nullptr) {
-        // Handle the error or initialize context here
-        std::cerr << "Error: context is not initialized." << std::endl;
-        return;
-    }
+using namespace std;
 
-    spriteBatch = std::make_unique<DirectX::SpriteBatch>(context);
-    bosses.push_back(Boss());
+int Game::isExit = 0;
+Graphics* Game::hWindow = NULL;
+
+Graphics* Game::getWindow()
+{
+	return hWindow;
 }
 
-void Game::initD3D() {
-    DXGI_SWAP_CHAIN_DESC scd = {};
-    scd.BufferDesc.Width = 800;
-    scd.BufferDesc.Height = 600;
-    scd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-    scd.BufferDesc.RefreshRate.Numerator = 60;
-    scd.BufferDesc.RefreshRate.Denominator = 1;
-    scd.SampleDesc.Count = 1;
-    scd.SampleDesc.Quality = 0;
-    scd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-    scd.BufferCount = 1;
-    scd.OutputWindow = hwnd;
-    scd.Windowed = TRUE;
-    scd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-
-    HRESULT hr = D3D11CreateDeviceAndSwapChain(
-        nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, nullptr, 0,
-        D3D11_SDK_VERSION, &scd, &swapChain,
-        &device, nullptr, &context
-    );
-
-    if (FAILED(hr)) {
-        MessageBox(nullptr, L"Failed to initialize Direct3D!", L"Error", MB_OK);
-        exit(1);
-    }
-	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> renderTargetView;
+void Game::exit()
+{
+	isExit = 1;
 }
 
-Game::~Game() {
-    instance = nullptr; // Clear instance when the object is destroyed
+Game::~Game(void)
+{
+	// Do nothing. Use release instead
 }
 
-void Game::processInput(WPARAM wParam) {
-    switch (wParam) {
-    case 'W':
-        mainCharacter.move(0, -1);
-        break;
-    case 'A':
-        mainCharacter.move(-1, 0);
-        break;
-    case 'S':
-        mainCharacter.move(0, 1);
-        break;
-    case 'D':
-        mainCharacter.move(1, 0);
-        break;
-    default:
-        break;
-    }
+
+Game::Game(HINSTANCE hInstance, LPWSTR name, int width, int height, int fps, int isFullScreen)
+{
+	//this->wnd_Instance = new Graphics(hInstance, name, width, height, fps, isFullScreen);
+	hWindow = new Graphics(hInstance, name, width, height, fps, isFullScreen);
+	_gametime = GameTime::getInstance();
+	_devicemanager = DeviceManager::getInstance();
+	_input = InputController::getInstance();
+	_spriteHandle = NULL;
 }
 
-void Game::initWindow(HINSTANCE hInstance, int nCmdShow) {
-    WNDCLASS wc = {};
-    wc.lpfnWndProc = WindowProc;
-    wc.hInstance = hInstance;
-    wc.lpszClassName = L"GameWindowClass";
+void Game::init()
+{
+	//wnd_Instance->initWindow();
+	if (hWindow == NULL)
+		throw;
+	hWindow->initWindow();
+	_gametime->init();
+	_devicemanager->Init(*hWindow);
+	//_devicemanager->Init(*wnd_Instance);
+	_input->init(hWindow->getWnd(), hWindow->gethInstance());
+	//_input->init(wnd_Instance->getWnd(), wnd_Instance->gethInstance());
+	this->_frameRate = 1000.0f / hWindow->getFrameRate(); //1000/30 = 33 milisecond
 
-    RegisterClass(&wc);
+	D3DXCreateSprite(_devicemanager->getDevice(), &this->_spriteHandle);
+	this->loadResource();
 
-    hwnd = CreateWindowEx(
-        0,
-        L"GameWindowClass",
-        L"My Game",
-        WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT, CW_USEDEFAULT, 800, 600,
-        nullptr, nullptr, hInstance, nullptr
-    );
-
-    if (!hwnd) {
-        MessageBox(nullptr, L"Failed to create window!", L"Error", MB_OK);
-        exit(1);
-    }
+	_oldTime = _gametime->getTotalGameTime();
+	_deltaTime = 0.0f;
 }
 
-void Game::run() {
-    ShowWindow(hwnd, SW_SHOW);
+void Game::run()
+{
+	MSG msg;
+	while (isExit == 0)
+	{
+#pragma region Translate Message
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		{
+			if (msg.message == WM_QUIT)
+				isExit = 1;
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		} // dont mention it.  see ebook if you want more info
+#pragma endregion
 
-    MSG msg = {};
-    while (msg.message != WM_QUIT) {
-        if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
-        }
+		_gametime->updateGameTime(); // gametime isn't run if dont call updateGameTime
+		_deltaTime = _gametime->getTotalGameTime() - _oldTime;
 
-        // Update Boss positions
-        for (Boss& boss : bosses) {
-            boss.update(800, 600); // Screen limit 800x600
-        }
-
-        // Clear screen and start drawing
-        context->ClearRenderTargetView(renderTargetView, DirectX::Colors::Black);
-        
-        spriteBatch->Begin();
-
-        // Draw bosses
-        for (Boss& boss : bosses) {
-            boss.draw(context, spriteBatch.get());
-        }
-
-        // Draw main character
-        mainCharacter.draw(context, spriteBatch.get());
-
-        spriteBatch->End();
-        swapChain->Present(1, 0); // Display new frame
-    }
+		if (_deltaTime >= _frameRate)
+		{
+			_oldTime += _frameRate;
+			_input->update();
+			this->render();
+		}
+		else
+			Sleep(_frameRate - _deltaTime); //sleep every frame for high performance
+	}
 }
 
-LRESULT CALLBACK Game::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-    switch (uMsg) {
-    case WM_KEYDOWN:
-        if (Game::instance) {  // Check if instance is created
-            Game::instance->processInput(wParam);
-        }
-        return 0;
-    case WM_DESTROY:
-        PostQuitMessage(0);
-        return 0;
-    }
-    return DefWindowProc(hwnd, uMsg, wParam, lParam);
+void Game::render() // call once per frame
+{
+	// ki?m tra n?u c?a s? ?ang focus không ph?i game thì không c?p nh?t
+	if (GetActiveWindow() != hWindow->getWnd())
+		return;
+	auto device = _devicemanager->getInstance();
+	float time = _gametime->getElapsedGameTime();
+
+	// ?? x? lý kéo c?a s? không v? d?n frame
+	// vì ch? là th? thu?t set c?ng th?i gian
+	// nên b?t k? ??i t??ng nào không update theo th?i gian thì khi kéo c?a s? s? b? d?n frame
+	if (time > this->_frameRate * 2)
+	{
+		time = _frameRate;
+	}
+
+	if (device->getDevice()->BeginScene() != DI_OK)
+		return;
+	device->clearScreen();
+	// main game's logic
+	updateInput(time);
+	update(time);
+	draw();
+
+	device->getDevice()->EndScene();
+
+	device->present();
+}
+
+void Game::draw()
+{
+}
+
+void Game::updateInput(float deltatime)
+{
+	// do nothing.
+	// override this for effection
+}
+
+void Game::update(float deltatime)
+{
+	// do nothing.
+	// override this for effection
+}
+
+void Game::loadResource()
+{
+	// do nothing.
+	// override this for effection
+}
+
+void Game::release()
+{
+	_devicemanager->release();
+	//SAFE_DELETE(_devicemanager);
+	_gametime->release();
+	//SAFE_DELETE(_gametime);
+	//_input->release();
+	//SAFE_DELETE(_input);
 }

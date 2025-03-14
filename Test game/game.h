@@ -1,32 +1,44 @@
-#ifndef GAME_H
-#define GAME_H
-#include "Character.h"
-#include "Boss.h"
-#include <vector>
+#ifndef __GAME_H__
+#define __GAME_H__
+
 #include <windows.h>
 #include <d3d11.h>
 #include <DirectXMath.h>
 
-class Game {
+using namespace DirectX;
+
+class Game
+{
 public:
-    static Game* instance; // Thêm bi?n instance ?? l?u ??i t??ng hi?n t?i
-    void initWindow(HINSTANCE hInstance, int nCmdShow);
-    Game();
-    ~Game();
-    void initD3D();
+    Game(HINSTANCE hInstance, LPWSTR name, int width, int height, int fps, int isFullScreen);
+    virtual ~Game();
+
+    void virtual init();
+    void virtual release();
+
+    void virtual updateInput(float deltatime);
+    void virtual update(float deltatime);
+    void virtual draw();
+    void virtual loadResource();
+
     void run();
-    void processInput(WPARAM wParam);
+    void render();
+    static void exit();
 
-    static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+protected:
+    HWND hWnd;
+    int screenWidth, screenHeight;
+    float frameRate;
 
-private:
-    HWND hwnd;
-    Character mainCharacter; // Thêm nhân v?t chính
-    std::unique_ptr<DirectX::SpriteBatch> spriteBatch;
+    static int isExit;
+
     ID3D11Device* device;
-    ID3D11DeviceContext* context; // Declare context
-    ID3D11RenderTargetView* renderTargetView; // Declare renderTargetView
+    ID3D11DeviceContext* deviceContext;
     IDXGISwapChain* swapChain;
+    ID3D11RenderTargetView* renderTargetView;
+
+    void initDirect3D();
+    void cleanupDirect3D();
 };
-extern std::vector<Boss> bosses;
-#endif // GAME_H
+
+#endif // __GAME_H__

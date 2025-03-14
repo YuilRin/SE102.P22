@@ -141,6 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Boss.h" />
+    <ClInclude Include="CastlevaniaGame.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Resource.h" />
