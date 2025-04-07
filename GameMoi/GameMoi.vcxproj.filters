@@ -1,0 +1,217 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Animation">
+      <UniqueIdentifier>{7c4078e7-6d1b-4295-ab79-5397603ab405}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Models">
+      <UniqueIdentifier>{a6ec97ab-1079-4d5a-9c61-a44c4c9c2c4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Models\Characters">
+      <UniqueIdentifier>{69458b65-944a-4a69-8952-8eb47d92715f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Models\Weapons">
+      <UniqueIdentifier>{5e7cbd86-5bfb-4183-a737-57ce4e690b63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Camera">
+      <UniqueIdentifier>{c66dccbf-42bf-4e9d-9157-03e98af8808f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Animation">
+      <UniqueIdentifier>{ceda1274-1d37-4b3f-9c8d-be87f2e1123e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Models">
+      <UniqueIdentifier>{d81a6663-441e-4510-8725-9f67d749a082}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Models\Characters">
+      <UniqueIdentifier>{a83f6289-bc79-479c-a130-3ec486271483}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Models\Weapon">
+      <UniqueIdentifier>{0f87923e-f40f-432c-a3bb-50e680f7db08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Tilemap">
+      <UniqueIdentifier>{ccc39ae0-c06c-45c7-9fb9-fa5beae3491a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Tilemap">
+      <UniqueIdentifier>{d8e29dc8-d490-4613-b361-ea177e1f07eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utilities">
+      <UniqueIdentifier>{91609a08-2b9c-4e49-9f1e-1093fcf21b54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utilities">
+      <UniqueIdentifier>{14de785e-08bf-4c9b-b214-b0a7f1c22474}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Camera">
+      <UniqueIdentifier>{15fbb02b-9136-455e-9f48-65b26b4cc113}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Image">
+      <UniqueIdentifier>{075bc1a7-d5f7-4d06-8c74-5e4d9e12edca}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Render.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation\Animation.h">
+      <Filter>Header Files\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Models\Weapons\Axe.h">
+      <Filter>Header Files\Models\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="Models\Weapons\Whip.h">
+      <Filter>Header Files\Models\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="Models\Weapons\Weapon.h">
+      <Filter>Header Files\Models\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Camera.h">
+      <Filter>Header Files\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Tilemap\TileMap.h">
+      <Filter>Header Files\Tilemap</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\GameTime.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\TimeSpan.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Models\Characters\Player.h">
+      <Filter>Header Files\Models\Characters</Filter>
+    </ClInclude>
+    <ClInclude Include="Models\GameObject.h">
+      <Filter>Header Files\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\define.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Models\Characters\Enemy.h">
+      <Filter>Header Files\Models\Characters</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\GameInit.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\GameLoop.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\StopWatch.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\WindowProc.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Models\Characters\Info.h">
+      <Filter>Header Files\Models\Characters</Filter>
+    </ClInclude>
+    <ClInclude Include="Tilemap\Collider.h">
+      <Filter>Header Files\Tilemap</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Models\Weapons\Axe.cpp">
+      <Filter>Source Files\Models\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="Models\Weapons\Whip.cpp">
+      <Filter>Source Files\Models\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation\Animation.cpp">
+      <Filter>Source Files\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\Time.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\TimeSpan.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Models\Characters\Player.cpp">
+      <Filter>Source Files\Models\Characters</Filter>
+    </ClCompile>
+    <ClCompile Include="Models\Weapons\Weapon.cpp">
+      <Filter>Source Files\Models\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="Models\GameObject.cpp">
+      <Filter>Source Files\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="Rended.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Models\Characters\Enemy.cpp">
+      <Filter>Source Files\Models\Characters</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera\Camera.cpp">
+      <Filter>Source Files\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\GameInit.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\GameLoop.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\StopWatch.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\WindowProc.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Models\Characters\Info.cpp">
+      <Filter>Source Files\Models\Characters</Filter>
+    </ClCompile>
+    <ClCompile Include="Tilemap\TileMap.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Tilemap\Collider.cpp">
+      <Filter>Source Files\Tilemap</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Image\frame2.png">
+      <Filter>Image</Filter>
+    </Image>
+    <Image Include="Image\frame2tileset.png">
+      <Filter>Image</Filter>
+    </Image>
+    <Image Include="Image\frame3.png">
+      <Filter>Image</Filter>
+    </Image>
+    <Image Include="Image\weapon.png">
+      <Filter>Image</Filter>
+    </Image>
+    <Image Include="Image\whip.jpg">
+      <Filter>Image</Filter>
+    </Image>
+    <Image Include="Image\frame3tileset.png">
+      <Filter>Image</Filter>
+    </Image>
+    <Image Include="Image\map.png">
+      <Filter>Image</Filter>
+    </Image>
+    <Image Include="Image\simon.jpg">
+      <Filter>Image</Filter>
+    </Image>
+    <Image Include="Image\tileset.png">
+      <Filter>Image</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Image\tileset.txt">
+      <Filter>Image</Filter>
+    </Text>
+  </ItemGroup>
+</Project>

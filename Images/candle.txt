@@ -1,5 +1,0 @@
-frame_name		left	top	right	bottom
-candle_01		0	0	8	16
-candle_02		8	0	16	16
-
-
